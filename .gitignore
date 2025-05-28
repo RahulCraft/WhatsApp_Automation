@@ -1,0 +1,29 @@
+# Python
+*.pyc
+__pycache__/
+*.pyo
+*.pyd
+
+# Virtual environments
+env/
+venv/
+
+# Django stuff
+*.sqlite3
+db.sqlite3
+*.log
+*.pot
+*.py[cod]
+*.swp
+staticfiles/
+media/
+static/
+local_settings.py
+.env
+
+# VSCode
+.vscode/
+
+# Mac/Windows/Linux OS junk files
+.DS_Store
+Thumbs.db

@@ -9,6 +9,7 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
+from decouple import config  # ✅ import decouple
 from .models import MessageTemplate, Contact, MessageLog
 
 # Home view
@@ -43,11 +44,12 @@ def send_message(request):
 
     return render(request, 'TestApp/send_message.html')
 
-# WhatsApp API
+
+# ✅ WhatsApp API - secure version with environment variables
 def send_whatsapp_message(phone, message, media):
-    url = 'https://graph.facebook.com/v13.0/your_phone_number_id/messages'
+    url = config('WHATSAPP_API_URL')  # ✅ URL from .env
     headers = {
-        'Authorization': 'Bearer your_access_token',
+        'Authorization': f'Bearer {config("WHATSAPP_ACCESS_TOKEN")}',  # ✅ Token from .env
         'Content-Type': 'application/json'
     }
     data = {
@@ -59,8 +61,8 @@ def send_whatsapp_message(phone, message, media):
     response = requests.post(url, headers=headers, json=data)
     return 'Sent' if response.status_code == 200 else 'Failed'
 
-# Login View with message and redirect
 
+# Login View with message and redirect
 def login_view(request):
     if request.method == "POST":
         username = request.POST.get("username")
@@ -77,6 +79,8 @@ def login_view(request):
             return render(request, 'TestApp/login.html')
 
     return render(request, 'TestApp/login.html')
+
+
 # Signup view with message
 @csrf_exempt
 def signup_view(request):
@@ -91,14 +95,18 @@ def signup_view(request):
     else:
         form = UserCreationForm()
     return render(request, 'TestApp/signup.html', {'form': form})
+
+
 # Logout
 def logout_view(request):
     logout(request)
     return redirect('login')
 
+
 # AJAX: Check login
 def check_login(request):
     return JsonResponse({'logged_in': request.user.is_authenticated})
+
 
 # AJAX login
 @csrf_exempt

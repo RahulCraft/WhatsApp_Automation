@@ -74,15 +74,24 @@ WSGI_APPLICATION = 'whatsapp_automation.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'whatsapp_automation',
+#         'USER': 'postgres',
+#         'PASSWORD': 'Abcd#^1234',
+#         'HOST': 'localhost',
+#         'PORT': '5432',
+#     }
+# }
+
+import dj_database_url
+from decouple import config
+
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'whatsapp_automation',
-        'USER': 'postgres',
-        'PASSWORD': 'Abcd#^1234',
-        'HOST': 'localhost',
-        'PORT': '5432',
-    }
+    'default': dj_database_url.config(
+        default=config('DATABASE_URL', default='postgres://postgres:Abcd#^1234@localhost:5432/whatsapp_automation')
+    )
 }
 
 
